@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using ColossalFramework.UI;
@@ -9,6 +9,7 @@ using CustomizeItExtended.Internal.Buildings;
 using CustomizeItExtended.Internal.Citizens;
 using CustomizeItExtended.Internal.Vehicles;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace CustomizeItExtended.GUI
@@ -277,27 +278,96 @@ namespace CustomizeItExtended.GUI
         public static UIButton CreateToggleButton(UIComponent parentComponent, Vector3 offset, UIAlignAnchor anchor,
             MouseEventHandler handler)
         {
-            var uibutton = UIView.GetAView().AddUIComponent(typeof(UIButton)) as UIButton;
-            uibutton.name = "CustomizeItExtendedButton";
-            uibutton.width = 26f;
-            uibutton.height = 26f;
-            uibutton.normalFgSprite = "Options";
-            uibutton.disabledFgSprite = "OptionsDisabled";
-            uibutton.hoveredFgSprite = "OptionsHovered";
-            uibutton.focusedFgSprite = "OptionsFocused";
-            uibutton.pressedFgSprite = "OptionsPressed";
-            uibutton.normalBgSprite = "OptionBase";
-            uibutton.disabledBgSprite = "OptionBaseDisabled";
-            uibutton.hoveredBgSprite = "OptionBaseHovered";
-            uibutton.focusedBgSprite = "OptionBaseFocused";
-            uibutton.pressedBgSprite = "OptionBasePressed";
-            uibutton.AlignTo(parentComponent, anchor);
-            uibutton.eventClick += handler;
-            uibutton.relativePosition += offset;
+            
+                // using the close button position as a position reference since the info panels do not have consistent hierarchy.
+                var closeButton = FindChildRecursive(
+                    parentComponent,
+                    c => c is UIButton && c.name == "Close"
+                ) as UIButton;
 
-            return uibutton;
+                UIComponent buttonParent;
+                Vector3 targetPos;
+
+                if (closeButton != null && closeButton.parent != null)
+                {
+                    buttonParent = closeButton.parent;
+                    const float buttonHeight = 32f;
+
+                    float x = closeButton.relativePosition.x + closeButton.width + 5f;
+                    float y = closeButton.relativePosition.y +
+                              (closeButton.height - buttonHeight) * 0.5f;
+
+                    targetPos = new Vector3(x, y);
+                }
+                else
+                {
+                    // Fallback: top-right of the panel root with a generic offset
+                    Debug.LogWarning(
+                        $"CustomizeIt: Close button not found under {parentComponent.name}, using fallback placement.");
+                    buttonParent = parentComponent;
+                    targetPos = Vector3.zero; 
+                }
+                
+                var button = buttonParent.AddUIComponent<UIButton>();
+                button.name = "CustomizeItExtendedButton";
+                button.width = 32f;
+                button.height = 32f;
+
+                button.normalFgSprite = "Options";
+                button.disabledFgSprite = "OptionsDisabled";
+                button.hoveredFgSprite = "OptionsHovered";
+                button.focusedFgSprite = "OptionsFocused";
+                button.pressedFgSprite = "OptionsPressed";
+
+                button.normalBgSprite = "OptionBase";
+                button.disabledBgSprite = "OptionBaseDisabled";
+                button.hoveredBgSprite = "OptionBaseHovered";
+                button.focusedBgSprite = "OptionBaseFocused";
+                button.pressedBgSprite = "OptionBasePressed";
+
+                button.eventClick += handler;
+
+                if (closeButton != null && closeButton.parent != null)
+                {
+                    button.relativePosition = targetPos;
+                }
+                else
+                {
+                    // fallback: align to top-right of panel root and nudge
+                    button.AlignTo(buttonParent, UIAlignAnchor.TopRight);
+                    button.relativePosition += offset;
+                }
+
+                return button;
         }
+        
+        public static UIComponent FindChildRecursive(UIComponent root, Func<UIComponent, bool> predicate)
+        {
+            foreach (UIComponent child in root.components)
+            {
+                if (predicate(child))
+                    return child;
 
+                var found = FindChildRecursive(child, predicate);
+                if (found != null)
+                    return found;
+            }
+            return null;
+        }
+        
+        public static void DumpUIHierarchy(UIComponent root, int depth = 0)
+        {
+            if (root == null)
+                return;
+
+            string indent = new string(' ', depth * 2);
+            Debug.Log($"{indent}- {root.name} ({root.GetType().Name})");
+
+            foreach (UIComponent child in root.components)
+            {
+                DumpUIHierarchy(child, depth + 1);
+            }
+        }
         public static UIButton CreateMovableButton(UIComponent parent, Vector3 position, MouseEventHandler clickHandler)
         {
             var uibutton = parent.AddUIComponent<UIButton>();
@@ -793,3 +863,71 @@ namespace CustomizeItExtended.GUI
         }
     }
 }
+
+
+/*
+ //Helper for the next person trying to beautify button position
+         public static void DumpUIHierarchy(UIComponent root, int depth = 0)
+        {
+            if (root == null)
+                return;
+
+            string indent = new string(' ', depth * 2);
+            Debug.Log($"{indent}- {root.name} ({root.GetType().Name})");
+
+            foreach (UIComponent child in root.components)
+            {
+                DumpUIHierarchy(child, depth + 1);
+            }
+        }
+        
+- (Library) CitizenWorldInfoPanel (UIPanel)
+  - Caption (UISlicedSprite)
+    - Close (UIButton)
+  - LocationMarker (UIMultiStateButton)
+  - ShowHideRoutesButton (UIMultiStateButton)
+  
+- (Library) CityServiceVehicleWorldInfoPanel (UIPanel)
+  - Caption (UISlicedSprite)
+    - Close (UIButton)
+  - LocationMarker (UIMultiStateButton)
+  - ShowHideRoutesButton (UIMultiStateButton)
+  
+  
+ - (Library) ShelterWorldInfoPanel (UIPanel)
+  - Caption (UISlicedSprite)
+    - Close (UIButton)
+  - LocationMarker (UIMultiStateButton)
+  - ShowHideRoutesButton (UIMultiStateButton)
+  
+  
+- (Library) WarehouseWorldInfoPanel (UIPanel)
+ - Caption (UISlicedSprite)
+   - BuildingName (UITextField)
+   - On/Off (UICheckBox)
+     - OnOff (UILabel)
+     - Unchecked (UISprite)
+       - Checked (UISprite)
+   - Panel (UIPanel)
+     - LocationMarker (UIMultiStateButton)
+     - ShowHideRoutesButton (UIMultiStateButton)
+     - Close (UIButton)
+     
+     
+- (Library) CityServiceWorldInfoPanel (UIPanel)
+  - Wrapper (UIPanel)
+    - CaptionPanel (UIPanel)
+      - Panel (UIPanel)
+        - LocationMarker (UIMultiStateButton)
+        - ShowHideRoutesButton (UIMultiStateButton)
+        - Close (UIButton)
+        - Panel (UIPanel)
+
+
+*/
+
+
+
+
+
+

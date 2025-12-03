@@ -55,6 +55,10 @@
       <HintPath>S:\Steam\steamapps\workshop\content\255710\450877484\ModTools.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ModTools, Version=3.2.3.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>S:\Steam\steamapps\workshop\content\255710\450877484\ModTools.dll</HintPath>
+    </Reference>
+
 
     <Reference Include="System" />
     <Reference Include="System.Core" />
