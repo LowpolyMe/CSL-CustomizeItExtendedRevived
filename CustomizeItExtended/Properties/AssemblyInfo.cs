@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CustomizeItExtended")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Customize It Extended (Revived)")]
+[assembly: AssemblyDescription("Revival of Customize It Extended, originally created by Celisuis.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CustomizeItExtended")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("Celisuis, maintained by LowPolyMe")]
+[assembly: AssemblyProduct("Customize It Extended (Revived)")]
+[assembly: AssemblyCopyright("Original mod © 2019 Celisuis; modifications © 2025 LowPolyMe")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

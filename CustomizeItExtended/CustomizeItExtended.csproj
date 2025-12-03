@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CustomizeItExtended</RootNamespace>
-    <AssemblyName>CustomizeItExtended</AssemblyName>
+    <AssemblyName>CustomizeItExtendedRevived</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,42 +31,44 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=1.2.0.1, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Lib.Harmony.1.2.0.1\lib\net35\0Harmony.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>S:\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="AdvancedVehicleOptions, Version=1.0.7393.26841, Culture=neutral, PublicKeyToken=null">
-      <HintPath>P:\Games\Steam\steamapps\workshop\content\255710\1548831935\AdvancedVehicleOptions.dll</HintPath>
+    <Reference Include="CitiesHarmony.API, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CitiesHarmony.API.2.2.0\lib\net35\CitiesHarmony.API.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>P:\Games\Cities Data\Assembly-CSharp.dll</HintPath>
+    <Reference Include="CitiesHarmony.Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CitiesHarmony.Harmony.2.2.2\lib\net35\CitiesHarmony.Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="ColossalManaged, Version=0.3.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>P:\Games\Cities Data\ColossalManaged.dll</HintPath>
+    <Reference Include="ColossalManaged">
+      <HintPath>S:\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ColossalManaged.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="ICities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>P:\Games\Cities Data\ICities.dll</HintPath>
+    <Reference Include="ICities">
+      <HintPath>S:\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ICities.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ModTools">
-      <HintPath>..\..\..\..\Games\Steam\steamapps\workshop\content\255710\450877484\ModTools.dll</HintPath>
+      <HintPath>S:\Steam\steamapps\workshop\content\255710\450877484\ModTools.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="ModTools, Version=3.2.3.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>P:\Games\Steam\steamapps\workshop\content\255710\450877484\ModTools.dll</HintPath>
-    </Reference>
-    <Reference Include="SeniorCitizenCenterMod, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>P:\Games\Steam\steamapps\workshop\content\255710\554232266\SeniorCitizenCenterMod.dll</HintPath>
-    </Reference>
+
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>P:\Games\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
+    <Reference Include="UnityEngine">
+      <HintPath>S:\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>P:\Games\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.UI.dll</HintPath>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>S:\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -127,4 +129,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="DeployToModDirectory" AfterTargets="Build">
+    <!-- Mod output path -->
+    <PropertyGroup>
+      <DeployDir>$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\CustomizeItExtendedRevived</DeployDir>
+    </PropertyGroup>
+  </Target>
 </Project>

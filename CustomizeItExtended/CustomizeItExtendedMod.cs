@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,8 +12,8 @@ using CustomizeItExtended.Internal.Vehicles;
 using CustomizeItExtended.Legacy;
 using CustomizeItExtended.Settings;
 using CustomizeItExtended.Translations;
-using Harmony;
 using ICities;
+using HarmonyLib;
 using UnityEngine;
 
 // ReSharper disable InconsistentNaming
@@ -25,13 +25,14 @@ namespace CustomizeItExtended
         internal const string Version = "1.6.2V";
 
         private static CustomizeItExtendedSettings _settings;
+        
+        private static Harmony _harmony;
 
-        private static HarmonyInstance _harmony;
         public static bool DebugMode =
             File.Exists(Path.Combine(DataLocation.localApplicationData, "CSharpDebugMode.txt"));
 
         internal UIDropDown LanguageDropdown;
-
+        private const string HarmonyId = "com.lowpolyme.CustomizeItExtendedRevived";
         public static CustomizeItExtendedSettings Settings
         {
             get
@@ -62,11 +63,11 @@ namespace CustomizeItExtended
 
         public void OnEnabled()
         {
-            _harmony = HarmonyInstance.Create("com.github.celisuis.csl.customizeitextended");
+            _harmony = new Harmony(HarmonyId);
 
             try
             {
-                _harmony.PatchAll();
+                _harmony.PatchAll(Assembly.GetExecutingAssembly());
             }
             catch (Exception e)
             {
@@ -97,7 +98,10 @@ namespace CustomizeItExtended
         {
             try
             {
-                _harmony.UnpatchAll("com.github.celisuis.csl.customizeitextended");    
+                if (_harmony != null)
+                {
+                    _harmony.UnpatchAll(HarmonyId);
+                }
             }
             catch (Exception e)
             {
